@@ -1,0 +1,37 @@
+{
+  "name": "motivdetox",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.17.0",
+    "@hookform/resolvers": "^3.9.0",
+    "@react-email/components": "^0.0.22",
+    "@tanstack/react-query": "^5.51.23",
+    "@tanstack/react-query-devtools": "^5.51.23",
+    "axios": "^1.7.4",
+    "bcrypt": "^5.1.1",
+    "lucide-react": "^0.428.0",
+    "mongoose": "^8.5.3",
+    "next": "^14.2.5",
+    "next-auth": "^4.24.7",
+    "nodemailer": "^6.9.14",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.52.2",
+    "react-hot-toast": "^2.4.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.51.15",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.5",
+    "postcss": "^8.4.41",
+    "tailwindcss": "^3.4.10"
+  }
+}
