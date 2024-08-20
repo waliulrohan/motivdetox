@@ -10,11 +10,12 @@ import axios from 'axios';
 import { useAsyncMutation } from '@/hooks/hooks';
 import { useRouter } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import { notifyError } from '@/lib/Toasting';
+import { notifyError, notifyLoading, notifySuccess } from '@/lib/Toasting';
 
 const UserForm = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
 
   const { register, handleSubmit, formState: { errors }, clearErrors } = useForm({
@@ -27,26 +28,37 @@ const UserForm = () => {
 
  
   const onSubmit = async(data) => {
-    console.log(data)
-    const result = await signIn('credentials', {
-        redirect: false,
-        identifier: data.identifier,
-        password: data.password,
-      });
-    console.log(result)
+    try {
+      setIsLoading(true)
+      const toastId = notifyLoading('Signing in.')
 
-  
-      if (result?.error) {
-        if (result.error === 'CredentialsSignin') {
-          notifyError("Incorrect username or password")
-        } else {
-            notifyError(result.error)
+      console.log(data)
+      const result = await signIn('credentials', {
+          redirect: false,
+          identifier: data.identifier,
+          password: data.password,
+        });
+      console.log(result)
+
+    
+        if (result?.error) {
+          if (result.error === 'CredentialsSignin') {
+            notifyError("Incorrect username or password", {id: toastId})
+          } else {
+              notifyError(result.error, {id: toastId})
+          }
         }
-      }
-  
-      if (result?.url) {
-        router.replace('/dashboard');
-      }
+    
+        if (result?.url) {
+          router.replace('/dashboard');
+          notifySuccess('Successfully signed in.', {id: toastId})
+        }
+    } catch (error) {
+      console.log(error)
+    } finally{
+      setIsLoading(false)
+    }
+
   };
 
   return (
@@ -56,7 +68,7 @@ const UserForm = () => {
         <div>
           <label htmlFor="identifier" className="block text-sm font-medium mb-1">Email or Username</label>
           <input
-            // disabled={isLoadingMutation}
+            disabled={isLoading}
             id="identifier"
             {...register('identifier')}
             className="block w-full border border-gray-300 rounded-md py-2 px-3 bg-transparent shadow-sm sm:text-sm"
@@ -69,7 +81,7 @@ const UserForm = () => {
           <label htmlFor="password" className="block text-sm font-medium mb-1">Password</label>
           <div className="relative">
             <input
-            //   disabled={isLoadingMutation}
+              disabled={isLoading}
               id="password"
               type={showPassword ? 'text' : 'password'}
               {...register('password')}
@@ -92,7 +104,7 @@ const UserForm = () => {
         </div>
 
         <button
-        //   disabled={isLoadingMutation}
+          disabled={isLoading}
           type="submit"
           className="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-200"
         >
