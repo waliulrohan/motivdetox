@@ -14,5 +14,8 @@ TODO:
 4. ai implementation(chat)
 5. chat page
 
+
+i did nonthng aboute motivdetox today.
+
 */
 export default page;
