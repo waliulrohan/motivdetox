@@ -1,3 +1,4 @@
+"use client"
 import { motion, useAnimationControls, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
 import NavigationLink from "./NavigationLink"
@@ -58,6 +59,8 @@ const Navigation = () => {
   return (
     <>
       <motion.nav
+        onMouseEnter={()=> setIsOpen(true)}
+        onMouseLeave={()=> setIsOpen(false)}
         variants={containerVariants}
         animate={containerControls}
         initial="close"
@@ -92,28 +95,29 @@ const Navigation = () => {
           </button>
         </div>
         <div className="flex flex-col gap-3">
-          <NavigationLink name="Dashboard">
+          <NavigationLink name="Dashboard" isOpen={isOpen}>
             <ChartBarIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
           </NavigationLink>
-          <NavigationLink name="Projects">
+          <NavigationLink name="Projects" isOpen={isOpen}>
             <SquareStack className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
           </NavigationLink>
-          {/* <NavigationLink name="Tasks">
+          {/* <NavigationLink name="Tasks" isOpen={isOpen}>
             <DocumentCheckIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
           </NavigationLink> */}
-          <NavigationLink name="Reporting">
+          <NavigationLink name="Reporting" isOpen={isOpen}>
             <ChartPie className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
           </NavigationLink>
-          <NavigationLink name="Users">
+          <NavigationLink name="Users" isOpen={isOpen}>
             <UsersIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
           </NavigationLink>
         </div>
+       {/*
         <div className="flex flex-col gap-3">
           <ProjectLink
             name="Virtual Reality"
             setSelectedProject={setSelectedProject}
           >
-            <div className="min-w-4 mx-2 border-pink-600 border rounded-full aspect-square bg-pink-700" />
+          <div className="min-w-4 mx-2 border-pink-600 border rounded-full aspect-square bg-pink-700" />
           </ProjectLink>
           <ProjectLink
             name="Apple Vision Pro"
@@ -131,6 +135,7 @@ const Navigation = () => {
             <div className="min-w-4 mx-2 border-yellow-600 border rounded-full aspect-square bg-yellow-700" />
           </ProjectLink>
         </div>
+       */}
       </motion.nav>
       <AnimatePresence>
         {selectedProject && (
