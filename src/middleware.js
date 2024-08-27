@@ -22,7 +22,8 @@ export async function middleware(request) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
 
-  if (!token && url.pathname.startsWith('/dashboard')) {
+  if (!token ) {
+    if( url.pathname.startsWith('/dashboard') || url.pathname.startsWith('/ai')  )
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }
 
