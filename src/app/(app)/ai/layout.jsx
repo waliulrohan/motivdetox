@@ -20,9 +20,9 @@ export default function RootLayout({
       <body className={inter.className}>
       <div className="w-full h-dvh flex flex-row relative">
           <ChatSidebar />
-          <div className="">
+
             {children}
-            </div>
+
         </div>
       </body>
     </html>
