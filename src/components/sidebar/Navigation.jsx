@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import NavigationLink from "./NavigationLink"
 import ProjectLink from "./ProjectLink"
 import ProjectNavigation from "./ProjectNavigation"
-import { ChartBarIcon, ChartPie, SquareStack, UsersIcon } from "lucide-react"
+import { BrainCircuit, ChartBarIcon, ChartPie, SquareStack, UsersIcon } from "lucide-react"
 
 const containerVariants = {
   close: {
@@ -109,6 +109,9 @@ const Navigation = () => {
           </NavigationLink>
           <NavigationLink name="Users" isOpen={isOpen}>
             <UsersIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+          </NavigationLink>
+          <NavigationLink name="AI" isOpen={isOpen} hrefPath="ai">
+            <BrainCircuit className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
           </NavigationLink>
         </div>
        {/*

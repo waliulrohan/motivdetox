@@ -23,7 +23,7 @@ export async function middleware(request) {
   }
 
   if (!token ) {
-    if( url.pathname.startsWith('/dashboard') || url.pathname.startsWith('/ai')  )
+    if( !url.pathname.startsWith('/auth') )
     return NextResponse.redirect(new URL('/auth/signin', request.url));
   }
 

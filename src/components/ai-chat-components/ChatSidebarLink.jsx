@@ -23,7 +23,26 @@ const linkVariants = {
   },
 };
 
-const NavigationLink = ({ children, name, isOpen, hrefPath="/" }) => {
+const iconVariants = {
+  close: {
+    opacity: 0,
+    transition: {
+      type: "spring",
+      damping: 15,
+      duration: 0.5,
+    },
+  },
+  open: {
+    opacity: 1,
+    transition: {
+      type: "spring",
+      damping: 15,
+      delay: 0.1, 
+    },
+  },
+};
+
+const ChatSidebarLink = ({ children, name, isOpen, hrefPath="/" }) => {
   return (
     <motion.div 
     className=""
@@ -31,32 +50,42 @@ const NavigationLink = ({ children, name, isOpen, hrefPath="/" }) => {
       scale: 0.95,
      }}
      whileHover={{
-      scale: 1.1,
+      scale: 1.05,
      }}
     >
-      <Link
-      
+    <Link
       href={hrefPath}
       className="flex p-1 rounded cursor-pointer stroke-[0.75] hover:stroke-neutral-100 stroke-neutral-400 text-neutral-400 hover:text-neutral-100 place-items-center gap-3 hover:bg-neutral-700/30 transition-colors duration-100"
     >
-      {children}
       <AnimatePresence>
       {isOpen && (
+        <>
+          <motion.div
+            key={name}
+            variants={iconVariants}
+            initial="close"
+            animate="open"
+            exit="close"
+            className="text-inherit font-poppins overflow-clip whitespace-nowrap tracking-wide"
+          >
+            {children}
+          </motion.div>
           <motion.p
             key={name}
             variants={linkVariants}
             initial="close"
             animate="open"
             exit="close"
-            className="text-inherit font-poppins overflow-clip whitespace-nowrap tracking-wide"
+            className="text-inherit font-poppins whitespace-nowrap tracking-wide overflow-hidden text-ellipsis "
           >
             {name}
           </motion.p>
+        </>
       )}
       </AnimatePresence>
-      </Link>
+    </Link>
     </motion.div>
   )
 }
 
-export default NavigationLink
+export default ChatSidebarLink
