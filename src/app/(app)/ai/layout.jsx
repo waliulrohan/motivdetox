@@ -12,15 +12,11 @@ export const metadata = {
   description: "MotiveAI is a ai motivator",
 };
 
-export default function RootLayout({ children }) {
+export default function AILayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <div className="w-full h-dvh flex flex-row relative">
-            <ChatSidebar />
-            {children}
-        </div>
-      </body>
-    </html>
+    <div className="w-full h-dvh flex flex-row relative">
+      <ChatSidebar />
+      {children}
+    </div>
   );
 }

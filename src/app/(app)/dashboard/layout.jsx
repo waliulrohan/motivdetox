@@ -4,7 +4,6 @@ import ReactQueryProvider from "@/context/ReactQueryProvider";
 import { Toaster } from "react-hot-toast";
 import Navigation from "@/components/sidebar/Navigation";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: "MotivDetox",
@@ -13,8 +12,6 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
         <div className="w-full h-dvh flex flex-row relative">
           <div className="w-[5rem] h-full">
             <Navigation />
@@ -23,7 +20,5 @@ export default function RootLayout({ children }) {
             {children}
           </div>
         </div>
-      </body>
-    </html>
   );
 }

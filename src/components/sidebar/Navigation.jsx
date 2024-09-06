@@ -58,7 +58,7 @@ const Navigation = () => {
 
   return (
     <>
-      <motion.nav
+      <motion.div
         onMouseEnter={()=> setIsOpen(true)}
         onMouseLeave={()=> setIsOpen(false)}
         variants={containerVariants}
@@ -139,7 +139,7 @@ const Navigation = () => {
           </ProjectLink>
         </div>
        */}
-      </motion.nav>
+      </motion.div>
       <AnimatePresence>
         {selectedProject && (
           <ProjectNavigation
