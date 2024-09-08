@@ -25,10 +25,10 @@ const Page = () => {
             {/* cards */}
             <div className="flex-1 flex flex-wrap gap-4 p-4 items-center justify-center">
                 <div className="flex flex-wrap gap-4 p-4 items-start justify-center">
-				<div className="w-[150px] h-[90px] bg-slate-600 rounded-lg"></div>
-				<div className="w-[150px] h-[90px] bg-slate-600 rounded-lg"></div>
-				<div className="w-[150px] h-[90px] bg-slate-600 rounded-lg"></div>
-			</div>
+                    <div className="w-[150px] h-[90px] bg-slate-600 rounded-lg"></div>
+                    <div className="w-[150px] h-[90px] bg-slate-600 rounded-lg"></div>
+                    <div className="w-[150px] h-[90px] bg-slate-600 rounded-lg"></div>
+                </div>
             </div>
 
             {/* Chat input */}

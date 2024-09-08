@@ -139,7 +139,7 @@ const ChatSidebar = () => {
         <div className="flex flex-col gap-3 flex-grow min-h-full ">
 
           <div className="h-[50px] flex flex-row justify-center items-end ">
-              <ChatSidebarLink name="New conversation" isOpen={isOpen} hrefPath="/">
+              <ChatSidebarLink name="New conversation" isOpen={isOpen} hrefPath="/ai">
                 <Plus className="stroke-inherit stroke-[0.75] min-w-6 w-6" />
               </ChatSidebarLink>
             </div>
