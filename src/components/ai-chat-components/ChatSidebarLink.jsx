@@ -42,7 +42,7 @@ const iconVariants = {
   },
 };
 
-const ChatSidebarLink = ({ children, name, isOpen, hrefPath="/" }) => {
+const ChatSidebarLink = ({ children, name, isOpen, hrefPath="/", _id }) => {
   return (
     <motion.div 
     className=""
@@ -59,28 +59,26 @@ const ChatSidebarLink = ({ children, name, isOpen, hrefPath="/" }) => {
     >
       <AnimatePresence>
       {isOpen && (
-        <>
+        <motion.div
+          key={`link-${_id}`}
+          initial="close"
+          animate="open"
+          exit="close"
+          className="flex items-center gap-3 w-full"
+        >
           <motion.div
-            key={name}
             variants={iconVariants}
-            initial="close"
-            animate="open"
-            exit="close"
             className="text-inherit font-poppins overflow-clip whitespace-nowrap tracking-wide"
           >
             {children}
           </motion.div>
           <motion.p
-            key={name}
             variants={linkVariants}
-            initial="close"
-            animate="open"
-            exit="close"
-            className="text-inherit font-poppins whitespace-nowrap tracking-wide overflow-hidden text-ellipsis "
+            className="text-inherit font-poppins whitespace-nowrap tracking-wide overflow-hidden text-ellipsis"
           >
             {name}
           </motion.p>
-        </>
+        </motion.div>
       )}
       </AnimatePresence>
     </Link>

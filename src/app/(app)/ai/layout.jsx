@@ -15,7 +15,6 @@ export const metadata = {
 export default function AILayout({ children }) {
   return (
     <div className="w-full h-dvh flex flex-row relative">
-      <ChatSidebar />
       {children}
     </div>
   );

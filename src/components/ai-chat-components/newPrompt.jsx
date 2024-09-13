@@ -23,10 +23,22 @@ const NewPrompt = () => {
 
     const chat = model.startChat({
         history: [
-        //   data?.history.map(({ role, parts }) => ({
-        //     role,
-        //     parts: [{ text: parts[0].text }],
-        //   })),
+          {
+            role: "user",
+            parts: [{ text: "Hello, how are you?" }],
+          },
+          {
+            role: "model",
+            parts: [{ text: "Hello! As an AI language model, I don't have feelings, but I'm functioning well and ready to assist you. How can I help you today?" }],
+          },
+          {
+            role: "user",
+            parts: [{ text: "Can you explain what React is?" }],
+          },
+          {
+            role: "model",
+            parts: [{ text: "Certainly! React is a popular JavaScript library for building user interfaces." }],
+          },
         ],
         generationConfig: {
         //   maxOutputTokens: 200,

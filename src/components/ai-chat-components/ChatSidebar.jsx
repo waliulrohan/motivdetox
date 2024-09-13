@@ -3,45 +3,14 @@ import { motion, useAnimationControls, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
 import ChatSidebarLink from "./ChatSidebarLink"
 import { ChartArea, LayoutDashboard, Plus } from "lucide-react"
+import { useMutation, useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { useParams } from 'next/navigation';
+import { useAsyncMutation } from "@/hooks/hooks"
 
-const chatList = [
-  {
-    id: "project_1"
-  },
-  {
-    id: "task_manager"
-  },
-  {
-    id: "personal_assistant"
-  },
-  {
-    id: "code_review_helper"
-  },
-  {
-    id: "brainstorming_session"
-  },
-  {
-    id: "bug_tracker"
-  },
-  {
-    id: "feature_planner"
-  },
-  {
-    id: "documentation_helper"
-  },
-  {
-    id: "performance_optimizer"
-  },
-  {
-    id: "security_advisor"
-  },
-  {
-    id: "ui_ux_consultant"
-  },
-  {
-    id: "database_designer"
-  },
-]
+
+
+
 
 
 const containerVariants = {
@@ -84,6 +53,8 @@ const ChatSidebar = () => {
   const containerControls = useAnimationControls()
   const svgControls = useAnimationControls()
 
+  const { conversationId } = useParams();
+
   useEffect(() => {
     if (isOpen) {
       containerControls.start("open")
@@ -93,6 +64,38 @@ const ChatSidebar = () => {
       svgControls.start("close")
     }
   }, [isOpen])
+
+  	const fetchConversations = async () => {
+		const response = await axios.get('/api/ai/conversations');
+		return response.data;
+	};
+
+    const { data: conversationsData, isLoading, isError, refetch } = useQuery({
+      queryKey: ['conversations'],
+      queryFn: fetchConversations,
+    });
+
+    if (isLoading) {
+      console.log('Loading conversations...');
+    }
+
+    if (isError) {
+      console.error('Error fetching conversations');
+    }
+
+    useEffect(() => {
+      if (conversationsData) {
+        console.log('Conversations:', conversationsData);
+      }
+    }, [conversationsData]);
+
+  useEffect(() => {
+    if (conversationId) {
+      console.log('Current conversation ID:', conversationId);
+
+      // You can use this conversationId for further operations
+    }
+  }, [conversationId]);
 
   const handleOpenClose = () => {
     setIsOpen(!isOpen)
@@ -139,20 +142,35 @@ const ChatSidebar = () => {
         <div className="flex flex-col gap-3 flex-grow min-h-full ">
 
           <div className="h-[50px] flex flex-row justify-center items-end ">
-              <ChatSidebarLink name="New conversation" isOpen={isOpen} hrefPath="/ai">
+              <ChatSidebarLink _id={'random2'} name="New conversation" isOpen={isOpen} hrefPath="/ai">
                 <Plus className="stroke-inherit stroke-[0.75] min-w-6 w-6" />
               </ChatSidebarLink>
             </div>
 
           <div className="flex flex-col gap-3 flex-grow h-[calc(100%-100px)] overflow-y-auto overflow-x-hidden ">
-            {chatList.map((item) => (
-              <ChatSidebarLink key={item.id} name={item.id} isOpen={isOpen} hrefPath={`/ai/${item.id}`}>
-
-              </ChatSidebarLink>
-            ))}
+            {isLoading ? (
+              <div className="text-neutral-400 text-center p-4">
+                Loading...
+              </div>
+            ) : conversationsData && conversationsData.length > 0 ? (
+              conversationsData.map((item) => (
+                <ChatSidebarLink
+                  key={item._id}
+                  name={item.title || 'Untitled Conversation'}
+                  isOpen={isOpen}
+                  hrefPath={`/ai/${item._id}`}
+                >
+                  
+                </ChatSidebarLink>
+              ))
+            ) : (
+              <div className="text-neutral-400 text-center p-4">
+                {conversationsData === null ? 'Error loading conversations' : 'No conversations yet'}
+              </div>
+            )}
           </div>
           <div className="h-[50px] flex flex-row justify-center items-end ">
-            <ChatSidebarLink name="Back to Dashboard" isOpen={isOpen} hrefPath="/">
+            <ChatSidebarLink name="Back to Dashboard" _id={'random1'} isOpen={isOpen} hrefPath="/">
               <LayoutDashboard className="stroke-inherit stroke-[0.75] min-w-6 w-6" />
             </ChatSidebarLink>
           </div>
