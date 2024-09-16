@@ -1,8 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
 import { BrainCircuit } from 'lucide-react';
+import Markdown from 'react-markdown';
 
 const MessageItem = ({ message, role }) => {
+  console.log(message);
   return (
     <div className={`flex ${role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
       <div className={`max-w-[70%] ${role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'} rounded-lg p-3`}>
@@ -11,7 +13,8 @@ const MessageItem = ({ message, role }) => {
             <BrainCircuit className=" stroke-[0.75] min-w-8 w-8" />
           </div>
         )}
-        <p className="text-sm">{message}</p>
+        {/* <Markdown>{message}</Markdown> */}
+        <p>{message}</p>
       </div>
     </div>
   );

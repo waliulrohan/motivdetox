@@ -7,7 +7,16 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function POST(req, res){
 
-  const { text, newConversation } = await req.json();
+  const { text, isNewConversation, conversationIdFromBody, role } = await req.json();
+  
+  // Add validation for text
+  if (!text || text.trim() === '') {
+    console.log('hayaaaaaaaaaaaaaaa');
+    return NextResponse.json(
+      { success: false, message: 'Text is required' },
+      { status: 500 }
+    );
+  }
 
   await dbConnect()
 
@@ -23,7 +32,7 @@ export async function POST(req, res){
   }
 
   try {
-    if(newConversation){
+    if(isNewConversation){
       const newConversation = new conversation({
         userId,
         title: text.substring(0, 40),
@@ -49,8 +58,8 @@ export async function POST(req, res){
         { status: 200 }
       );
     }else{
-      const conversation = await conversation.findOne({ userId });
-      if (!conversation) {
+      const existingConversation = await conversation.findOne({ _id: conversationIdFromBody });
+      if (!existingConversation) {
         return NextResponse.json(
           {
             success: false,
@@ -60,8 +69,8 @@ export async function POST(req, res){
         );
       }
       const newMessage = new message({
-        conversationId: conversation._id,
-        role: "user",
+        conversationId: existingConversation._id,
+        role,
         parts: [{ text }],
       });
 
@@ -75,15 +84,13 @@ export async function POST(req, res){
         { status: 200 }
       );
     }
-      
-
-
   } catch (error) {
-    console.error('Error registering user:', error);
+    console.error('Error saving message:', error);
     return NextResponse.json(
       {
         success: false,
-        message: 'Error registering user',
+        message: 'Error saving message',
+        error: error.message, // Include the error message for debugging
       },
       { status: 500 }
     );

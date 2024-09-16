@@ -5,8 +5,11 @@ import model from "@/lib/gemini";
 import MessageItem from "./messageItem";
 import { useEffect, useRef, useState } from "react";
 import Markdown from "react-markdown";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
-const NewPrompt = () => {
+const NewPrompt = ({messages, conversationId}) => {
+    console.log(messages);
     const [message, setMessage] = useState("");
     const [answer, setAnswer] = useState("");
 
@@ -45,12 +48,29 @@ const NewPrompt = () => {
         },
       });
 
-	const onSubmit = async(data) => {
-		// Handle form submission
-		console.log(data);
-        setMessage(data.message);
-        
-        const result = await chat.sendMessageStream(data.message);
+     const queryClient = useQueryClient();
+
+     const mutation = useMutation({
+        mutationFn: async({text, role}) => {
+           const response = await axios.post(`/api/ai/chat`, { text, isNewConversation: false, conversationIdFromBody: conversationId, role });
+           return response;
+        },
+        onSuccess: () => {
+          queryClient
+            .invalidateQueries({ queryKey: ["messages", conversationId] })
+            .then(() => {
+            });
+        },
+        onError: (err) => {
+          console.log(err);
+        },
+     });
+
+     const add = async (text, isInitial, role) => {
+      if (!isInitial) setMessage(text);
+  
+      try {
+        const result = await chat.sendMessageStream(text);
         let accumulatedText = "";
         for await (const chunk of result.stream) {
             const chunkText = chunk.text();
@@ -58,8 +78,32 @@ const NewPrompt = () => {
             accumulatedText += chunkText;
             setAnswer(accumulatedText);
         }
+        if(!isInitial) {
+          mutation.mutate({text, role});
+        }
+        mutation.mutate({text: answer, role: "model"});// model mutation
+      } catch (err) {
+        console.log(err);
+      }
+    };
+  
 
+	const onSubmit = async(data) => {
+    add(data.message, false, "user");
 	};
+
+   // THE USE EFFECT WILL MAKE IT SAVE IN THE DATABASE TWICE IN DEVELOPMENT
+   // IN PRODUCTION WE DON'T NEED IT
+   const hasRun = useRef(false);
+
+   useEffect(() => {
+     if (!hasRun.current) {
+       if (messages?.length === 1) {
+         add(messages[0].parts[0].text, true, "user");
+       }
+     }
+     hasRun.current = true;
+   }, []);
 
   return (
     <>
@@ -79,7 +123,7 @@ const NewPrompt = () => {
      )}
 
      <div ref={endRef} />
-    <div className="w-full p-4 flex flex-row items-center justify-center sticky bottom-0">
+    <div className="w-full p-4 flex flex-row items-center justify-center fixed bottom-0 left-0 right-0">
         <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-row gap-2 items-center justify-center w-4/5 bg-slate-600 py-2 px-4 rounded-lg"

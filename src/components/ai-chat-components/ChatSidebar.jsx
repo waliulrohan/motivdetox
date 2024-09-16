@@ -3,10 +3,10 @@ import { motion, useAnimationControls, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
 import ChatSidebarLink from "./ChatSidebarLink"
 import { ChartArea, LayoutDashboard, Plus } from "lucide-react"
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
-import { useAsyncMutation } from "@/hooks/hooks"
+
 
 
 
@@ -152,8 +152,8 @@ const ChatSidebar = () => {
               <div className="text-neutral-400 text-center p-4">
                 Loading...
               </div>
-            ) : conversationsData && conversationsData.length > 0 ? (
-              conversationsData.map((item) => (
+            ) : conversationsData.conversations && conversationsData.conversations?.length > 0 ? (
+              conversationsData.conversations.map((item) => (
                 <ChatSidebarLink
                   key={item._id}
                   name={item.title || 'Untitled Conversation'}

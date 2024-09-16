@@ -4,11 +4,16 @@ import { ArrowUp } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import ChatSidebar from '@/components/ai-chat-components/ChatSidebar';
+import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+
 
 
 
 
 const Page = () => {
+	const router = useRouter()
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
 			message: '',
@@ -17,9 +22,11 @@ const Page = () => {
 
 
 	const createNewConversation = async (text) => {
-		const response = await axios.post('/api/ai/chat', { text, newConversation: true });
+		const response = await axios.post('/api/ai/chat', { text, isNewConversation: true });
 		return response.data;
 	  };
+
+	  const queryClient = useQueryClient();
 	
 	  const mutation = useMutation({
 		mutationFn: createNewConversation,
@@ -27,28 +34,28 @@ const Page = () => {
 		  // Invalidate and refetch
 		  console.log(data);
 		  queryClient.invalidateQueries({ queryKey: ['conversations'] });
+		  router.push(`/ai/${data.conversationId}`);
 		},
 	  });
 	
-	  const [executeMutation, isLoadingMutation, mutationData] = useAsyncMutation(mutation);
-	  const handleNewConversation = async () => {
+	  
+	const handleNewConversation = async (text) => {
 		try {
-		  const result = await executeMutation("Creating new conversation...", "New conversation");
-		  if (result && result.success) {
+			const result = await mutation.mutateAsync(text);
 			console.log("New conversation created:", result);
-			// You might want to do something with the new conversation ID here
-			// For example, update the current conversation ID or redirect to the new conversation
-		  }
+			// You can add additional logic here, such as updating the UI or navigating to the new conversation
 		} catch (error) {
-		  console.error("Error creating new conversation:", error);
+			console.error("Error creating new conversation:", error);
+			// Handle the error appropriately
 		}
-	  };
+	};
 	  
 
 
 	const onSubmit = (data) => {
 		// Handle form submission
 		console.log(data);
+		handleNewConversation(data.message);
 	};
 
 	return (
