@@ -17,7 +17,6 @@ export const authOptions ={
           async authorize(credentials, req){
             dbConnect()
             try {
-                console.log(credentials.identifier)
                 const user = await UserModel.findOne({
                     $or: [
                         {email : credentials.identifier},

@@ -13,14 +13,12 @@ const Page = () => {
     const { conversationId } = useParams();
 
     const fetchMessages = async () => {
-        console.log('hi i am in')
 		const response = await axios.get(`/api/ai/messages/${conversationId}`);
-        console.log(response)
 		return response.data;
 	};
 
     const { data: messagesData, isLoading, isError, refetch } = useQuery({
-      queryKey: ['messages'],
+      queryKey: ['messages', conversationId],
       queryFn: fetchMessages,
     });
 
@@ -37,12 +35,12 @@ const Page = () => {
 
     useEffect(() => {
         endRef.current.scrollIntoView({ behavior: 'smooth' });
-    }, [conversationId]);
+    }, [conversationId, messagesData]);
 
 	return (
         <>
 			<ChatSidebar />
-            <div className='w-full h-full bg-slate-400 flex flex-col'>
+            <div className='w-full h-full bg-slate-400 flex flex-col pb-24 '>
                 {/* Header*/}
                 <div className="w-full h-11 bg-slate-600 flex items-center px-4">
                     {/* Header content */}

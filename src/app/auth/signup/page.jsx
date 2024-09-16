@@ -54,7 +54,6 @@ const UserForm = () => {
   //mutation
   const signupUser = async (formData) => {
     const { data } = await axios.post('/api/signup', formData);
-    console.log('nigga', data, formData)
     return data;
   };
   const mutation = useMutation({
@@ -68,7 +67,6 @@ const UserForm = () => {
     if(executionData && executionData.success){
       router.replace(`/auth/verify/${data.username}`)
     }
-    console.log(data, mutationData);
   };
 
   return (

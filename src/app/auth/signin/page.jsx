@@ -32,14 +32,11 @@ const UserForm = () => {
       setIsLoading(true)
       const toastId = notifyLoading('Signing in.')
 
-      console.log(data)
       const result = await signIn('credentials', {
           redirect: false,
           identifier: data.identifier,
           password: data.password,
         });
-      console.log(result)
-
     
         if (result?.error) {
           if (result.error === 'CredentialsSignin') {

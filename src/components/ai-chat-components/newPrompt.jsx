@@ -9,9 +9,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 
 const NewPrompt = ({messages, conversationId}) => {
-    console.log(messages);
     const [message, setMessage] = useState("");
     const [answer, setAnswer] = useState("");
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const endRef = useRef(null);
     useEffect(() => {
@@ -25,24 +25,10 @@ const NewPrompt = ({messages, conversationId}) => {
 	});
 
     const chat = model.startChat({
-        history: [
-          {
-            role: "user",
-            parts: [{ text: "Hello, how are you?" }],
-          },
-          {
-            role: "model",
-            parts: [{ text: "Hello! As an AI language model, I don't have feelings, but I'm functioning well and ready to assist you. How can I help you today?" }],
-          },
-          {
-            role: "user",
-            parts: [{ text: "Can you explain what React is?" }],
-          },
-          {
-            role: "model",
-            parts: [{ text: "Certainly! React is a popular JavaScript library for building user interfaces." }],
-          },
-        ],
+        history: messages.map(message => ({
+          role: message.role,
+          parts: [{ text: message.parts[0].text }]
+        })),
         generationConfig: {
         //   maxOutputTokens: 200,
         },
@@ -56,17 +42,21 @@ const NewPrompt = ({messages, conversationId}) => {
            return response;
         },
         onSuccess: () => {
-          queryClient
-            .invalidateQueries({ queryKey: ["messages", conversationId] })
-            .then(() => {
-            });
+          queryClient.invalidateQueries({ queryKey: ["messages", conversationId] })
+          .then(() => {
+            setAnswer('');
+            setMessage('');
+            setIsProcessing(false);
+          });
         },
         onError: (err) => {
-          console.log(err);
+          console.log("error in mutation : ", err);
+          setIsProcessing(false);
         },
      });
 
-     const add = async (text, isInitial, role) => {
+     const add = async (text, isInitial) => {
+      setIsProcessing(true);
       if (!isInitial) setMessage(text);
   
       try {
@@ -74,14 +64,17 @@ const NewPrompt = ({messages, conversationId}) => {
         let accumulatedText = "";
         for await (const chunk of result.stream) {
             const chunkText = chunk.text();
-            console.log(chunkText);
             accumulatedText += chunkText;
             setAnswer(accumulatedText);
         }
         if(!isInitial) {
-          mutation.mutate({text, role});
+          mutation.mutate({text, role: "user"});
+          console.log('inside is initial')
         }
-        mutation.mutate({text: answer, role: "model"});// model mutation
+        console.log(accumulatedText)
+        mutation.mutate({text: accumulatedText, role: "model"});
+        console.log(accumulatedText)
+
       } catch (err) {
         console.log(err);
       }
@@ -89,7 +82,7 @@ const NewPrompt = ({messages, conversationId}) => {
   
 
 	const onSubmit = async(data) => {
-    add(data.message, false, "user");
+    add(data.message, false);
 	};
 
    // THE USE EFFECT WILL MAKE IT SAVE IN THE DATABASE TWICE IN DEVELOPMENT
@@ -99,7 +92,7 @@ const NewPrompt = ({messages, conversationId}) => {
    useEffect(() => {
      if (!hasRun.current) {
        if (messages?.length === 1) {
-         add(messages[0].parts[0].text, true, "user");
+         add(messages[0].parts[0].text, true);
        }
      }
      hasRun.current = true;

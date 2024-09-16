@@ -31,11 +31,9 @@ const UserForm = () => {
   const [executeMutation, isLoadingMutation, mutationData] = useAsyncMutation(mutation);
 
   const onSubmit = async(data) => {
-    console.log(data.code)
     const executionData = await executeMutation("Verifying user...",{code: data.code, username: params.username});
 
     if(executionData && executionData.success){
-        console.log(executionData)
       router.replace(`/auth/signin`)
     }
   };

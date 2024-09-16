@@ -31,8 +31,6 @@ const Page = () => {
 	  const mutation = useMutation({
 		mutationFn: createNewConversation,
 		onSuccess: (data) => {
-		  // Invalidate and refetch
-		  console.log(data);
 		  queryClient.invalidateQueries({ queryKey: ['conversations'] });
 		  router.push(`/ai/${data.conversationId}`);
 		},
@@ -42,8 +40,6 @@ const Page = () => {
 	const handleNewConversation = async (text) => {
 		try {
 			const result = await mutation.mutateAsync(text);
-			console.log("New conversation created:", result);
-			// You can add additional logic here, such as updating the UI or navigating to the new conversation
 		} catch (error) {
 			console.error("Error creating new conversation:", error);
 			// Handle the error appropriately
@@ -53,8 +49,7 @@ const Page = () => {
 
 
 	const onSubmit = (data) => {
-		// Handle form submission
-		console.log(data);
+
 		handleNewConversation(data.message);
 	};
 

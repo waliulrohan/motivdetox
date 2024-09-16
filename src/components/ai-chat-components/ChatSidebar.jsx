@@ -75,25 +75,10 @@ const ChatSidebar = () => {
       queryFn: fetchConversations,
     });
 
-    if (isLoading) {
-      console.log('Loading conversations...');
-    }
-
-    if (isError) {
-      console.error('Error fetching conversations');
-    }
-
-    useEffect(() => {
-      if (conversationsData) {
-        console.log('Conversations:', conversationsData);
-      }
-    }, [conversationsData]);
 
   useEffect(() => {
     if (conversationId) {
-      console.log('Current conversation ID:', conversationId);
 
-      // You can use this conversationId for further operations
     }
   }, [conversationId]);
 

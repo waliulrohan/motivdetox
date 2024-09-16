@@ -4,7 +4,6 @@ import { BrainCircuit } from 'lucide-react';
 import Markdown from 'react-markdown';
 
 const MessageItem = ({ message, role }) => {
-  console.log(message);
   return (
     <div className={`flex ${role === 'user' ? 'justify-end' : 'justify-start'} mb-4`}>
       <div className={`max-w-[70%] ${role === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'} rounded-lg p-3`}>
