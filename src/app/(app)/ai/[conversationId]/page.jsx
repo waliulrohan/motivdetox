@@ -7,6 +7,7 @@ import NewPrompt from '@/components/ai-chat-components/newPrompt';
 import { useQuery } from '@tanstack/react-query';
 import ChatSidebar from '@/components/ai-chat-components/ChatSidebar';
 import axios from 'axios';
+import { Loader2 } from 'lucide-react';
 
 const Page = () => {
 
@@ -22,15 +23,6 @@ const Page = () => {
       queryFn: fetchMessages,
     });
 
-    // const [conversations, setConversations] = useState([
-    //     {
-    //         _id: '1',
-    //         message: 'Hello, how are you? how can I help you?',
-    //         role: 'model',
-    //         createdAt: new Date(),
-    //     },
-
-    // ]);
     const endRef = useRef(null);
 
     useEffect(() => {
@@ -40,18 +32,19 @@ const Page = () => {
 	return (
         <>
 			<ChatSidebar />
-            <div className='w-full h-full bg-slate-400 flex flex-col pb-24 '>
+            <div className='w-full h-full flex flex-col pb-24 '>
                 {/* Header*/}
-                <div className="w-full h-11 bg-slate-600 flex items-center px-4">
+                <div className="w-full h-11 bg-transparent flex items-center px-4">
                     {/* Header content */}
                 </div>
                 {/* conversations */}
                 <div className="flex-1 flex flex-col gap-4 p-4 overflow-y-auto">
-                    {/* {conversations.map((conversation) => (
-                        <MessageItem key={conversation._id} message={conversation.message} role={conversation.role} />
-                    ))} */}
                     {isLoading ?
-                    (<div>Loading...</div>) :
+                    (
+                      <div className="flex justify-center items-center h-full">
+                        <Loader2 className="animate-spin h-12 w-12 text-gray-500" />
+                      </div>
+                    ) :
 
                     messagesData && messagesData.messages.length > 0 ?
                     messagesData.messages.map((message) => (

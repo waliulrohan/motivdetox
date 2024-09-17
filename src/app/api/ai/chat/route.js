@@ -7,11 +7,11 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 
 export async function POST(req, res){
 
-  const { text, isNewConversation, conversationIdFromBody, role } = await req.json();
+  const { text, isNewConversation, conversationIdFromBody, role, createdAt } = await req.json();
   
   // Add validation for text
   if (!text || text.trim() === '') {
-    console.log('hayaaaaaaaaaaaaaaa');
+    console.log('hayraaaaaaaaaaaaaaa');
     return NextResponse.json(
       { success: false, message: 'Text is required' },
       { status: 500 }
@@ -45,6 +45,7 @@ export async function POST(req, res){
         conversationId,
         role: "user",
         parts: [{ text }],
+        createdAt,
       });
 
       await newMessage.save();
@@ -72,6 +73,7 @@ export async function POST(req, res){
         conversationId: existingConversation._id,
         role,
         parts: [{ text }],
+        createdAt,
       });
 
       await newMessage.save();

@@ -55,7 +55,7 @@ const ChatSidebarLink = ({ children, name, isOpen, hrefPath="/", _id }) => {
     >
     <Link
       href={hrefPath}
-      className="flex p-1 rounded cursor-pointer stroke-[0.75] hover:stroke-neutral-100 stroke-neutral-400 text-neutral-400 hover:text-neutral-100 place-items-center gap-3 hover:bg-neutral-700/30 transition-colors duration-100"
+      className="flex p-1 rounded cursor-pointer stroke-[0.75] hover:stroke-gray-100 stroke-gray-400 text-gray-400 hover:text-gray-100 place-items-center gap-3 hover:bg-gray-700/40 transition-colors duration-150"
     >
       <AnimatePresence>
       {isOpen && (

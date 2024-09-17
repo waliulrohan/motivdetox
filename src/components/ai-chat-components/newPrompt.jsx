@@ -38,17 +38,30 @@ const NewPrompt = ({messages, conversationId}) => {
 
      const mutation = useMutation({
         mutationFn: async({text, role}) => {
-           const response = await axios.post(`/api/ai/chat`, { text, isNewConversation: false, conversationIdFromBody: conversationId, role });
+           const response = await axios.post(`/api/ai/chat`, { text, isNewConversation: false, conversationIdFromBody: conversationId, role, createdAt: new Date() });
            return response;
         },
         onSuccess: () => {
           queryClient.invalidateQueries({ queryKey: ["messages", conversationId] })
           .then(() => {
+            // Wait for the query to finish refetching
+            return queryClient.getQueryData(["messages", conversationId]);
+          })
+          .then(() => {
             setAnswer('');
             setMessage('');
+            document.getElementById('message').value = '';
+            document.getElementById('message').style.height = 'auto';
             setIsProcessing(false);
           });
-        },
+            setAnswer('');
+            setMessage('');
+            const messageInput = document.getElementById('message');
+            if (messageInput) {
+              messageInput.value = '';
+              messageInput.style.height = 'auto';
+            }
+          },
         onError: (err) => {
           console.log("error in mutation : ", err);
           setIsProcessing(false);
@@ -77,6 +90,7 @@ const NewPrompt = ({messages, conversationId}) => {
 
       } catch (err) {
         console.log(err);
+        setIsProcessing(false);
       }
     };
   
@@ -119,15 +133,16 @@ const NewPrompt = ({messages, conversationId}) => {
     <div className="w-full p-4 flex flex-row items-center justify-center fixed bottom-0 left-0 right-0">
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-row gap-2 items-center justify-center w-4/5 bg-slate-600 py-2 px-4 rounded-lg"
+            className="flex flex-row gap-2 items-center justify-center w-4/5 bg-gray-800 py-2 px-4 rounded-lg shadow-lg"
         >
             <div className="flex-grow relative">
                 <textarea
                     autoCorrect='off'
                     id="message"
                     {...register('message', { required: 'Message is required' })}
-                    className="block w-full bg-transparent text-white outline-none resize-none rounded-md p-2 pr-10 min-h-[40px] max-h-[120px]"
+                    className={`${isProcessing && 'cursor-not-allowed'} block w-full bg-transparent text-white outline-none resize-none rounded-md p-2 pr-10 min-h-[40px] max-h-[120px]`}
                     placeholder="Enter your message"
+                    disabled={isProcessing}
                     rows={1}
                     onInput={(e) => {
                         e.target.style.height = 'auto';
@@ -138,7 +153,8 @@ const NewPrompt = ({messages, conversationId}) => {
 
             <button
                 type="submit"
-                className="rounded-full bg-blue-500 hover:bg-blue-600 transition-colors px-3 py-3 text-white"
+                disabled={isProcessing}
+                className={`rounded-full ${isProcessing ? 'bg-gray-600 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700'} transition-colors px-3 py-3 text-white`}
             >
                 <ArrowUp size={20} />
             </button>

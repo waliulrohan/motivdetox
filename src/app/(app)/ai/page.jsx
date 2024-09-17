@@ -1,7 +1,7 @@
 'use client'
 
 import { ArrowUp } from 'lucide-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import ChatSidebar from '@/components/ai-chat-components/ChatSidebar';
 import { QueryClient, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -13,6 +13,8 @@ import { useRouter } from 'next/navigation';
 
 
 const Page = () => {
+	const [isProcessing, setIsProcessing] = useState(false);
+
 	const router = useRouter()
 	const { register, handleSubmit, formState: { errors } } = useForm({
 		defaultValues: {
@@ -22,7 +24,7 @@ const Page = () => {
 
 
 	const createNewConversation = async (text) => {
-		const response = await axios.post('/api/ai/chat', { text, isNewConversation: true });
+		const response = await axios.post('/api/ai/chat', { text, isNewConversation: true, createdAt: new Date() });
 		return response.data;
 	  };
 
@@ -45,6 +47,14 @@ const Page = () => {
 			// Handle the error appropriately
 		}
 	};
+
+	useEffect(() => {
+		if (mutation.isLoading) {
+			setIsProcessing(true);
+		} else {
+			setIsProcessing(false);
+		}
+	}, [mutation.isLoading]);
 	  
 
 
@@ -56,9 +66,9 @@ const Page = () => {
 	return (
 		<>
 			<ChatSidebar />
-			<div className='w-full h-full bg-slate-400 flex flex-col'>
+			<div className='w-full h-full  flex flex-col'>
 				{/* Header*/}
-				<div className="w-full h-11 bg-slate-600 flex items-center px-4">
+				<div className="w-full h-11  flex items-center px-4">
 					{/* Header content */}
 				</div>
 				{/* cards */}
@@ -74,7 +84,7 @@ const Page = () => {
 				<div className="w-full p-4 flex flex-row items-center justify-center">
 					<form
 						onSubmit={handleSubmit(onSubmit)}
-						className="flex flex-row gap-2 items-center justify-center w-4/5 bg-slate-600 py-2 px-4 rounded-lg"
+						className="flex flex-row gap-2 items-center justify-center w-4/5 bg-gray-800 py-2 px-4 rounded-lg shadow-lg"
 					>
 						<div className="flex-grow relative">
 							<textarea
@@ -93,7 +103,7 @@ const Page = () => {
 
 						<button
 							type="submit"
-							className="rounded-full bg-blue-500 hover:bg-blue-600 transition-colors px-3 py-3 text-white"
+							className="rounded-full bg-indigo-600 hover:bg-indigo-700 transition-colors px-3 py-3 text-white"
 						>
 							<ArrowUp size={20} />
 						</button>

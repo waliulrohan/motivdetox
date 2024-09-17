@@ -2,7 +2,7 @@
 import { motion, useAnimationControls, AnimatePresence } from "framer-motion"
 import { useState, useEffect } from "react"
 import ChatSidebarLink from "./ChatSidebarLink"
-import { ChartArea, LayoutDashboard, Plus } from "lucide-react"
+import { BrainCircuit, ChartArea, LayoutDashboard, Loader2, Plus } from "lucide-react"
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { useParams } from 'next/navigation';
@@ -37,7 +37,7 @@ const containerVariants = {
 const svgVariants = {
   close: {
     rotate: 360,
-    stroke: "#000000", 
+    stroke: "#ffffff", 
   },
   open: {
     rotate: 180,
@@ -95,9 +95,32 @@ const ChatSidebar = () => {
         variants={containerVariants}
         animate={containerControls}
         initial="close"
-        className={`bg-neutral-900 flex flex-col z-10 gap-5  fixed top-0 left-0 min-h-dvh max-h-dvh  shadow shadow-neutral-600`} >  
+        className={`bg-gray-800 flex flex-col z-10 gap-5  fixed top-0 left-0 min-h-dvh max-h-dvh  shadow-lg shadow-gray-900`} >  
         <div className="flex flex-row w-full justify-between place-items-center">
-          <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-700 rounded-full" />
+          <AnimatePresence>
+            {isOpen
+            && 
+            <motion.div 
+            initial="close"
+            animate="open"
+            exit="close"
+            variants={{
+              close: {
+                opacity: 0,
+                scale: 0.8,
+                transition: { duration: 0.3, ease: "easeInOut" }
+              },
+              open: {
+                opacity: 1,
+                scale: 1,
+                transition: { duration: 0.3, ease: "easeOut" }
+              }
+            }}
+            className="w-10 h-10 bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center rounded-full" 
+            >
+              <BrainCircuit className="stroke-[1.5] min-w-8 w-8 text-gray-300" />
+            </motion.div>}
+          </AnimatePresence>
           <button
             className="p-1 rounded-full flex"
             onClick={() => handleOpenClose()}
@@ -134,8 +157,8 @@ const ChatSidebar = () => {
 
           <div className="flex flex-col gap-3 flex-grow h-[calc(100%-100px)] overflow-y-auto overflow-x-hidden ">
             {isLoading ? (
-              <div className="text-neutral-400 text-center p-4">
-                Loading...
+              <div className="flex justify-center items-center h-full">
+                <Loader2 className="animate-spin h-8 w-8 text-gray-500" />
               </div>
             ) : conversationsData.conversations && conversationsData.conversations?.length > 0 ? (
               conversationsData.conversations.map((item) => (

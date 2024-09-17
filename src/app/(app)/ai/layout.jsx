@@ -14,7 +14,7 @@ export const metadata = {
 
 export default function AILayout({ children }) {
   return (
-    <div className="w-full h-dvh flex flex-row relative">
+    <div className="w-full h-dvh flex flex-row relative bg-gray-900">
       {children}
     </div>
   );
