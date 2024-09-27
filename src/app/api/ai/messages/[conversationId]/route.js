@@ -19,24 +19,4 @@ export async function GET(request, { params }) {
   }
 }
 
-export async function POST(request, { params }) {
-  const { conversationId } = params;
-  const { role, parts } = await request.json();
 
-  try {
-    await dbConnect();
-
-    const newMessage = new Message({
-      conversationId,
-      role,
-      parts,
-    });
-
-    await newMessage.save();
-
-    return NextResponse.json({ message: newMessage }, { status: 201 });
-  } catch (error) {
-    console.error("Error creating message:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
-  }
-}

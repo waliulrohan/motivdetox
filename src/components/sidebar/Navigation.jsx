@@ -8,7 +8,8 @@ import { BrainCircuit, ChartBarIcon, ChartPie, SquareStack, UsersIcon } from "lu
 
 const containerVariants = {
   close: {
-    width: "5rem",
+    width: "3rem",
+    padding: "5px",
     transition: {
       type: "spring",
       damping: 15,
@@ -17,6 +18,7 @@ const containerVariants = {
   },
   open: {
     width: "16rem",
+    padding: "20px",
     transition: {
       type: "spring",
       damping: 15,
@@ -64,10 +66,10 @@ const Navigation = () => {
         variants={containerVariants}
         animate={containerControls}
         initial="close"
-        className="bg-neutral-900 flex flex-col z-10 gap-20 p-5 absolute top-0 left-0 h-full shadow shadow-neutral-600"
+        className="bg-gray-800 flex flex-col z-10 gap-20 absolute top-0 left-0 h-full shadow shadow-gray-900"
       >
         <div className="flex flex-row w-full justify-between place-items-center">
-          <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-700 rounded-full" />
+          <div className="w-10 h-10 bg-gradient-to-br  from-gray-700 to-gray-800  rounded-full" />
           <button
             className="p-1 rounded-full flex"
             onClick={() => handleOpenClose()}
@@ -96,22 +98,22 @@ const Navigation = () => {
         </div>
         <div className="flex flex-col gap-3">
           <NavigationLink name="Dashboard" isOpen={isOpen}>
-            <ChartBarIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+            <ChartBarIcon className="stroke-inherit stroke-[1.7] min-w-8 w-8 text-gray-300" />
           </NavigationLink>
           <NavigationLink name="Projects" isOpen={isOpen}>
-            <SquareStack className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+            <SquareStack className="stroke-inherit stroke-[1.7] min-w-8 w-8" />
           </NavigationLink>
           {/* <NavigationLink name="Tasks" isOpen={isOpen}>
             <DocumentCheckIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
           </NavigationLink> */}
           <NavigationLink name="Reporting" isOpen={isOpen}>
-            <ChartPie className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+            <ChartPie className="stroke-inherit stroke-[1.7] min-w-8 w-8" />
           </NavigationLink>
           <NavigationLink name="Users" isOpen={isOpen}>
-            <UsersIcon className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+            <UsersIcon className="stroke-inherit stroke-[1.7] min-w-8 w-8" />
           </NavigationLink>
           <NavigationLink name="AI" isOpen={isOpen} hrefPath="ai">
-            <BrainCircuit className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
+            <BrainCircuit className="stroke-inherit stroke-[1.7] min-w-8 w-8" />
           </NavigationLink>
         </div>
        {/*

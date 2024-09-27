@@ -12,11 +12,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-        <div className="w-full h-dvh flex flex-row relative">
-          <div className="w-[5rem] h-full">
+        <div className="w-full h-dvh flex flex-row relative bg-gray-900">
+          <div className="w-[3rem] h-full">
             <Navigation />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 flex justify-center items-center p-3">
             {children}
           </div>
         </div>
