@@ -46,8 +46,8 @@ export const Kanban = () => {
 const Header = () => {
   return (
     <div className="mb-6">
-      <h1 className="text-xl font-medium text-white">Good morning! ☀️</h1>
-      <p className="text-zinc-400">Let's work like there is no tomorrow.</p>
+      <h1 className="text-xl font-medium text-gray-200">Good morning! ☀️</h1>
+      <p className="text-gray-300">Let's work like there is no tomorrow.</p>
     </div>
   );
 };
@@ -91,13 +91,13 @@ const Form = ({ setTodos }) => {
               e.preventDefault();
               handleSubmit();
             }}
-            className="mb-6 w-full rounded border border-zinc-700 bg-zinc-900 p-3"
+            className="mb-6 w-full rounded border border-gray-700 bg-gray-800 p-3"
           >
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="What do you need to do?"
-              className="h-24 w-full resize-none rounded bg-zinc-900 p-3 text-sm text-zinc-50 placeholder-zinc-500 caret-zinc-50 focus:outline-none"
+              className="h-24 w-full resize-none rounded bg-transparent p-3 text-sm text-zinc-50 placeholder-zinc-500 caret-zinc-50 focus:outline-none"
             />
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
@@ -134,7 +134,7 @@ const Form = ({ setTodos }) => {
       </AnimatePresence>
       <button
         onClick={() => setVisible((pv) => !pv)}
-        className="grid w-full place-content-center rounded-full border border-zinc-700 bg-zinc-900 py-3 text-lg text-white transition-colors hover:bg-zinc-800 active:bg-zinc-900"
+        className="grid w-full place-content-center rounded-full border border-gray-700 bg-gray-800 py-3 text-lg text-white transition-colors hover:bg-zinc-800 active:bg-zinc-900"
       >
         <Plus
           className={`transition-transform ${visible ? "rotate-45" : "rotate-0"}`}
@@ -214,7 +214,7 @@ const Todo = ({ removeElement, handleCheck, id, children, checked, time }) => {
     <motion.div
       ref={scope}
       layout
-      className="relative flex w-full items-center gap-3 rounded border border-zinc-700 bg-zinc-900 p-3"
+      className="relative flex w-full items-center gap-3 rounded border border-gray-700 bg-gray-800 p-3"
     >
       <input
         type="checkbox"
